@@ -1,5 +1,5 @@
 ##Toy Exoplanet Simulator
-This repository contains a Python tool developed during my Master’s internship under the supervision of Dr. Arthur Vigan.
+This repository contains a Python tool developed during my Master’s internship under the supervision of Dr. Arthur Vigan at the Laboratoire d'Astrophysique de Marseille (LAM).
 It can simulate a planet’s 3D Keplerian orbit, load a high-resolution stellar PHOENIX spectrum, generate the planet’s reflected spectrum, visualize the results, and prepare them for injection into NASA’s Roman Coronagraph simulator.
 
 ##Repository Contents
