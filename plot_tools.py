@@ -248,27 +248,81 @@ def absolute_velocity(times_days: np.ndarray,
 def albedo(times_days: np.ndarray,
            P_days: float,
            Ag_app: np.ndarray,
-           Ag_max: float,
-           Ag_obs: float,
-           t_obs: float):
-    
-    frac = times_days / P_days
-    frac_obs = t_obs / P_days
+           Ag_max: float = 1.0,
+           Ag_obs: float | None = None,
+           t_obs: float | None = None,
+           use_log: bool = True,
+           eps: float | None = None):
+    """
+    Trace l'albédo/phase apparent(e) en fonction du temps.
+    - use_log=True : axe Y logarithmique robuste (0 interdit -> on clippe).
+    - eps : seuil min (si None, choisi automatiquement).
 
-    plt.figure(num=10, figsize=(6,4))
+    Ag_app doit être compris dans [0,1] physiquement ; on clippe si besoin.
+    """
+    import numpy as np
+    import matplotlib.pyplot as plt
+
+    # x = fraction de période (float pur)
+    frac = np.asarray(times_days, dtype=float) / float(P_days)
+
+    # y = albédo apparent, clip physique [0,1]
+    y = np.asarray(Ag_app, dtype=float)
+    y = np.clip(y, 0.0, 1.0)
+
+    # borne supérieure physique
+    ymax_phys = min(1.0, float(Ag_max) if np.isfinite(Ag_max) else 1.0)
+
+    # sécurisation log : choisir eps automatiquement si non fourni
+    if use_log:
+        # min strictly positive in data (si tout est 0, on prend 1e-6)
+        pos = y[y > 0]
+        if eps is None:
+            if pos.size:
+                # un seuil ~100× plus petit que la plus petite valeur non nulle, borné à 1e-6
+                eps = max(1e-6, float(np.nanmin(pos)) / 100.0)
+            else:
+                eps = 1e-6
+        # on force un plancher strictly > 0
+        y_plot = np.clip(y, eps, ymax_phys)
+    else:
+        y_plot = y
+        eps = None  # pas utilisé
+
+    # point d'observation (optionnel)
+    have_obs = (Ag_obs is not None) and (t_obs is not None)
+    if have_obs:
+        frac_obs = float(t_obs) / float(P_days)
+        y_obs = float(Ag_obs)
+        y_obs = np.clip(y_obs, eps if use_log else 0.0, ymax_phys)
+
+    # tracé
+    plt.figure(num=10, figsize=(6, 4))
     plt.clf()
-    plt.plot(frac, Ag_app, linewidth=2, label="Albedo apparent")
-    plt.plot(frac_obs, Ag_obs, 'ro', label=f't_obs = {t_obs:.1f} j')
+    plt.plot(frac, y_plot, linewidth=2, label="Albédo apparent")
+
+    if have_obs:
+        plt.plot(frac_obs, y_obs, 'ro', label=f"t_obs = {t_obs:.1f} j")
+
     plt.xlim(0, 1)
-    plt.ylim(0, Ag_max * 1.05)
+
+    if use_log:
+        plt.yscale('log')
+        # bornes Y stables et propres
+        ymin = eps
+        ymax = max(np.nanmax(y_plot), ymin * 10)
+        plt.ylim(ymin, ymax * 1.05)
+    else:
+        plt.ylim(0, ymax_phys * 1.05)
+
     plt.xlabel("Temps depuis périastre (fraction de période)")
     plt.ylabel("Albédo géométrique apparent")
     plt.title("Variation apparente de l'albédo géométrique")
-    plt.yscale('log')
-    plt.grid(True)
+    plt.grid(True, alpha=0.35)
     plt.legend()
     plt.tight_layout()
     plt.show()
+
 
 
 # Tracés 3D et 2D orbitaux
