@@ -223,7 +223,13 @@ def main():
     
     '''-----------------------------------------------------------'''
 
-    beta = float(v_abs[i] / cst.c.value)
+        # Valeurs observées à t_obs (c’est-à-dire days)
+    C_obs    = C[i]
+    v_rad    = vz       #composante radiale (vu depuis l’observateur)
+    v_obs    = v_rad[i]
+    Ag_obs   = phi[i]
+
+    beta = float(v_rad[i] / cst.c.value)
 
     # --- Extraction des valeurs au bon instant ---
     
@@ -241,11 +247,6 @@ def main():
     doppler_shift(wave_nm, flux_star, flux_p_spec, beta)
     albedo_phase_spec(wave_nm, Ag_KCl, phi0, label=f"{material} (φ={phi0:.2f}, R=50)")
 
-    # Valeurs observées à t_obs (c’est-à-dire days)
-    C_obs    = C[i]
-    v_rad    = vz       #composante radiale (vu depuis l’observateur)
-    v_obs    = v_rad[i]
-    Ag_obs   = phi[i]
 
     # Tracés temporels avec point rouge à t_obs
     contrast(times_days=times_days, P_days=P_days, C=C, C_obs=C_obs, t_obs=days)
