@@ -1,8 +1,7 @@
-# -*- coding: utf-8 -*-
 """
 Created on Sun Jul  6 12:14:18 2025
 
-@author: rache
+@author: rachel
 """
 """
 
