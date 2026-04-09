@@ -1,8 +1,8 @@
-# -*- coding: utf-8 -*-
+
 """
 Created on Thu Jun 12 16:25:19 2025
 
-@author: rache
+@author: rachel
 """
 
 # orbital_spectra.py
