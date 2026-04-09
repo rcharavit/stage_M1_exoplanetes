@@ -1,16 +1,10 @@
 """
-Created on Sun Jul  6 12:14:18 2025
-
-@author: rachel
-"""
-"""
-
 Ce module permet de charger, interpoler et, si besoin, dégrader spectroscopiquement 
 les spectres d'albédo géométrique de différents matériaux atmosphériques, 
 utilisés pour modéliser la lumière réfléchie par une exoplanète.
 
 Fonctionnalités principales :
------------------------------
+
 - Charger automatiquement les spectres d'albédo à partir de fichiers .dat selon le matériau sélectionné.
 - Convertir les spectres depuis le domaine du nombre d’onde (cm⁻¹) vers celui des longueurs d’onde (µm),
   en tenant compte des unités physiques.
@@ -19,11 +13,11 @@ Fonctionnalités principales :
 - Simuler une dégradation instrumentale en résolution spectrale (R) à l’aide d’un noyau de convolution 1D.
 
 Matériaux disponibles :
------------------------
+
 - "KCl", "ZnS", "Na2S", "ZnS_KCl", "no_clouds"
 
 Utilisation typique :
----------------------
+
 - Utiliser `load_albedo_spectrum(material)` pour obtenir le spectre brut d’albédo (λ, A_g)
 - Utiliser `resample_and_degrade(...)` pour interpoler ce spectre sur la grille du modèle,
   avec ou sans dégradation spectrale selon la résolution instrumentale R souhaitée.
@@ -57,12 +51,12 @@ La fonction :
     • colonne 5 : composante thermique du flux planétaire.
 
 Paramètres
-----------
+
 material : str
     Nom du matériau (doit correspondre à une clé de _MATERIAL_FILES)
 
 Retour
-------
+
 data : ndarray de shape (N, 4)
     Tableau contenant σ, flux_net, flux_planet, flux_therm pour chaque longueur d’onde
 """
@@ -100,12 +94,12 @@ La fonction :
       A_g(λ) = (F_plan - F_therm) / (F_plan - F_net)
 
 Paramètres
-----------
+
 material : str
     Nom du matériau à charger (clé de _MATERIAL_FILES)
 
 Retour
-------
+
 wvl_um : ndarray
     Longueurs d’onde en microns (µm)
 A_g0 : ndarray
@@ -135,7 +129,7 @@ avec un noyau de largeur équivalente à λ/R, pour approximer une résolution s
 Si la largeur du noyau est trop petite (moins de 3 pixels), la fonction renvoie le spectre original.
 
 Paramètres
-----------
+
 wvl_um : ndarray
     Grille spectrale uniforme en longueur d’onde (en microns)
 spectrum : ndarray
@@ -144,7 +138,7 @@ R : int
     Résolution spectrale souhaitée (R = λ / Δλ)
 
 Retour
-------
+
 spectrum_convolved : ndarray
     Spectre lissé par convolution (même taille que `spectrum`)
 """
@@ -174,7 +168,7 @@ Cette fonction :
   de résolution R (si R est spécifié).
 
 Paramètres
-----------
+
 wvl_src : ndarray
     Grille spectrale d’origine (en microns)
 A_src : ndarray
@@ -185,7 +179,7 @@ R : int, optionnel
     Résolution spectrale simulée (R = λ / Δλ). Si None, aucune dégradation n’est appliquée.
 
 Retour
-------
+
 A_interp : ndarray
     Albédo interpolé sur la grille cible, avec dégradation éventuelle
 """
