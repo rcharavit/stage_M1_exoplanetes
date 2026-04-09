@@ -1,8 +1,8 @@
-# -*- coding: utf-8 -*-
+
 """
 Created on Fri Jun 13 11:36:57 2025
 
-@author: rache
+@author: rachel
 """
 """
 Script principal de simulation exoplanétaire — modélisation orbitale et spectroscopie
