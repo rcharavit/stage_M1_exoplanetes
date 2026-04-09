@@ -1,10 +1,4 @@
 
-"""
-Created on Thu Jun 12 16:25:19 2025
-
-@author: rachel
-"""
-
 # orbital_spectra.py
 """
 Module pour la simulation spectro-orbitales :
@@ -47,7 +41,7 @@ G       = const.G.value
 au      = const.au.value
 
 
-# --- Orbital mechanics ---
+# Orbital mechanics
 
 def anomaly_Kepler(M: np.ndarray,
                    e: float,
@@ -113,7 +107,7 @@ maxiter : int
     Nombre maximal d’itérations pour la méthode de Newton–Raphson (défaut : 50)
 
 Retour
-------
+
 f_obs : float
     Anomalie vraie au temps t_obs (en radians)
 """
@@ -146,7 +140,7 @@ Effectue successivement :
   - une rotation autour de l’axe z par la longitude du nœud ascendant Ω (Omega).
 
 Paramètres
-----------
+
 xo, yo, zo : array-like
     Coordonnées initiales du vecteur dans le repère orbital (plan de l’orbite)
 omega : float
@@ -157,7 +151,7 @@ Omega : float
     Longitude du nœud ascendant (en radians)
 
 Retour
-------
+
 x3, y3, z3 : array-like
     Coordonnées du vecteur après rotation dans le repère inertiel
 """
@@ -189,7 +183,7 @@ dans le plan orbital, puis applique une rotation spatiale selon (ω, i, Ω)
 pour obtenir les coordonnées (X, Y, Z) dans le référentiel inertiel.
 
 Paramètres
-----------
+
 a : float
     Demi-grand axe de l’orbite (en unités arbitraires, typiquement UA)
 e : float
@@ -204,7 +198,7 @@ nb : int
     Nombre de points de l’orbite à générer (par défaut : 400)
 
 Retour
-------
+
 X, Y, Z : ndarray
     Coordonnées 3D de l’orbite dans le référentiel inertiel, en unités de a
 """
@@ -230,7 +224,7 @@ Chaque point est exprimé en coordonnées cartésiennes (x, y, z), en unités du
 La rotation orbitale (ω, i, Ω) est appliquée à tous les points.
 
 Paramètres
-----------
+
 a : float
     Demi-grand axe de l’orbite
 e : float
@@ -245,7 +239,7 @@ f0_deg : float
     Anomalie vraie de la planète à l’instant considéré (en degrés)
 
 Retour
-------
+
 planet, peri, asc, desc : tuple(x, y, z)
     Coordonnées 3D des quatre points clés dans le référentiel inertiel
 """
@@ -276,7 +270,7 @@ def orbit_xyz(a_AU: float,
     Calcule la position (X, Y, Z) en 3D pour chaque anomalie vraie f_t.
 
     Parameters
-    ----------
+
     a_AU : float
         Demi-grand axe (UA)
     e : float
@@ -291,7 +285,7 @@ def orbit_xyz(a_AU: float,
         Longitude du nœud ascendant en radians
 
     Returns
-    -------
+
     X, Y, Z : ndarrays
         Coordonnées 3D de la planète sur toute l’orbite (en UA)
     """
@@ -311,12 +305,12 @@ def phase_function(X: np.ndarray, Y: np.ndarray, Z: np.ndarray) -> np.ndarray:
     dans le repère inertiel, en supposant que l’observateur regarde dans la direction +Z.
 
     Parameters
-    ----------
+
     X, Y, Z : ndarrays
         Coordonnées 3D (en UA ou m, unité cohérente) de la planète sur l’orbite complète.
         
     Returns
-    -------
+
     phi : ndarray
         Fonction de phase φ(t) (entre 0 et 1)
         
@@ -355,7 +349,7 @@ La fonction :
 - Applique les rotations orbitales (ω, i, Ω) pour obtenir les vitesses dans le repère inertiel.
 
 Paramètres
-----------
+
 times_days : ndarray
     Grille temporelle (en jours)
 a_AU : float
@@ -374,7 +368,7 @@ Mstar : float
     Masse de l’étoile (en masses solaires)
 
 Retour
-------
+
 vx, vy, vz : ndarray
     Composantes du vecteur vitesse (en m/s) dans le repère inertiel
 """
@@ -404,7 +398,7 @@ def orbit_parameters(e: float, a_AU: float, Mstar: float, Mplanet: float,
     Calcule les instants, l’anomalie vraie, la période orbitale et la vitesse orbitale.
 
     Parameters
-    ----------
+
     e : float
         Excentricité
     a_AU : float
@@ -423,7 +417,7 @@ def orbit_parameters(e: float, a_AU: float, Mstar: float, Mplanet: float,
         Nombre de points temporels
 
     Returns
-    -------
+
     times_days : ndarray
         Grille temporelle en jours
     f_t : ndarray
@@ -477,7 +471,7 @@ La fonction :
 - Retourne la grille spectrale en nanomètres et le flux photonique spectral associé.
 
 Paramètres
-----------
+
 wave_path : str
     Chemin vers le fichier FITS contenant la grille de longueurs d’onde (en Å)
 spec_path : str
@@ -488,7 +482,7 @@ lam_max : float
     Longueur d’onde maximale à conserver (en Å) — défaut : 7500 Å
 
 Retour
-------
+
 wave_nm : ndarray
     Grille de longueurs d’onde en nanomètres
 flux_star : Quantity
@@ -509,7 +503,7 @@ flux_star : Quantity
     return wave_nm, flux_star
 
 
-# --- Spectre réfléchi de la planète ---
+# Spectre réfléchi de la planète
 def planet_refl_spec(wave_nm, r_m, phi_t, flux_star, material, Rp, t_index):
     """
 Calcule le flux planétaire réfléchi en fonction du temps et de la longueur d’onde, ainsi que le contraste intégré.
@@ -524,7 +518,7 @@ La fonction :
 - Calcule également le spectre réfléchi instantané au temps d’observation donné (t_index).
 
 Paramètres
-----------
+
 wave_nm : ndarray
     Longueurs d’onde en nanomètres (grille spectrale du modèle)
 r_m : ndarray
@@ -541,7 +535,7 @@ t_index : int
     Indice temporel correspondant à l’instant d’observation
 
 Retour
-------
+
 flux_p_time : ndarray
     Flux planétaire réfléchi intégré dans le visible à chaque instant (en ph/s/m²)
 C : ndarray
