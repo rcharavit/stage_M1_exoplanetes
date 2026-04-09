@@ -1,11 +1,5 @@
 
 """
-Created on Thu Jun 12 16:32:50 2025
-
-@author: rachel
-"""
-
-"""
 Module de tracés pour résultats orbitales et spectraux.
 Sépare la partie plotting des calculs.
 Fonctions :
@@ -62,7 +56,7 @@ def contrast_spec(
     à la résolution spectrale R (par exemple, R=50 comme Roman).
 
     Paramètres
-    ----------
+
     wave_nm : ndarray
         Longueurs d’onde (en nm).
     material : str
@@ -81,17 +75,17 @@ def contrast_spec(
     
     from albedo_tools import load_albedo_spectrum
 
-    # --- Charger et interpoler l’albédo spectral du matériau ---
+    # Charger et interpoler l’albédo spectral du matériau
     wvl_src, A_src = load_albedo_spectrum(material)
     Ag_interp = resample_and_degrade(wvl_src, A_src, wave_nm, R=None)  # pas de dégradation
 
-    # --- Calcul analytique du contraste spectral ---
+    # Calcul analytique du contraste spectral
     C_lambda = Ag_interp * phi_val * (Rp / r_val)**2
 
-    # --- Dégradation à la résolution souhaitée ---
+    # Dégradation à la résolution souhaitée
     C_lambda_R = resample_and_degrade(wave_nm * 1e-3, C_lambda, wave_nm, R=R)
 
-    # --- Tracé ---
+    # Tracé
     plt.figure(num=3, figsize=(7, 4))
     plt.clf()
     plt.plot(wave_nm, C_lambda_R, label=f"{material}, R = {R}")
@@ -337,7 +331,7 @@ Affiche l'orbite 3D, positionne la planète à l'instant days et dessine
 ses vecteurs de vitesse.
 
 Parameters
-----------
+
 compute_orbit : function
     Renvoie X, Y, Z (UA) pour l'orbite complète.
 compute_points : function
@@ -363,7 +357,7 @@ days : float
     X, Y, Z = compute_orbit(a, e, inc, omega, Omega)
     planet, peri, asc, desc = compute_points(a, e, inc, omega, Omega, f0_deg)
     
-    # --- Conversion en arcsec ---
+    # Conversion en arcsec
     facteur_arcsec = 1 / distance_pc
     X, Y, Z = np.array(X) * facteur_arcsec, np.array(Y) * facteur_arcsec, np.array(Z) * facteur_arcsec
     planet = np.array(planet) * facteur_arcsec
@@ -493,8 +487,8 @@ def albedo_phase_spec(wave_nm: np.ndarray,
     """
     Trace l'albédo apparent A_p(λ) = φ · A_g(λ) sur la grille wave_nm.
 
-    Parameters
-    ----------
+    Parameters:
+
     wave_nm : ndarray
         Longueurs d'onde en nm.
     Ag_spec : ndarray
