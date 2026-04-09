@@ -1,17 +1,12 @@
 
 """
-Created on Fri Jun 13 11:36:57 2025
-
-@author: rachel
-"""
-"""
 Script principal de simulation exoplanétaire — modélisation orbitale et spectroscopie
 
 Ce script exécute la simulation complète d’un système exoplanétaire vu en lumière réfléchie,
 à partir de modèles orbitaux képlériens, de spectres stellaires (PHOENIX) et d’albédo planétaire.
 
 Fonctionnalités principales :
------------------------------
+
 - Charge les spectres stellaires haute résolution (modèles PHOENIX).
 - Charge et interpole les spectres d’albédo géométrique d’un matériau atmosphérique.
 - Calcule l’orbite complète de la planète à partir des 6 paramètres orbitaux (a, e, i, ω, Ω, M⋆).
@@ -29,20 +24,20 @@ Fonctionnalités principales :
     • le décalage Doppler du spectre planétaire
 
 Paramètres modifiables :
-------------------------
+
 - Données orbitales (a, e, i, ω, Ω, M⋆, Rₚ)
 - Date d'observation t_obs (en jours depuis le périastre)
 - Matériau atmosphérique pour l’albédo : "KCl", "ZnS", "Na2S", "ZnS_KCl", "no_clouds"
 - Spectres PHOENIX : fichiers .fits à haute résolution
 
 Ce fichier appelle les modules suivants :
------------------------------------------
+
 - orbital_spectra.py : calculs orbitaux et spectres planétaires
 - albedo_tools.py : traitement et interpolation des spectres d’albédo
 - plot_tools.py : fonctions d’affichage (spectres, orbites, contrastes, etc.)
 
 Utilisation :
--------------
+
 Lancer simplement le script :
     python main_orbit_model.py
 
@@ -56,7 +51,7 @@ import astropy.units as u
 from astropy import constants as cst
 from astropy.time import Time
 
-# --- 1) Import des fonctions de vos modules ---
+# 1) Import des fonctions de vos modules
 from orbital_spectra import (true_anomaly,
     load_phoenix_spec,
     orbit_parameters,
@@ -85,7 +80,7 @@ from plot_tools import (
 from albedo_tools import load_albedo_spectrum, resample_and_degrade
 from integrated_photometry import integrated_photometry
 
-# --- 2) Paramètres utilisateur ---
+# 2) Paramètres utilisateur
 # Fichiers PHOENIX
 wave_fits = r"C:\M1 SOAC\S2\Stage M1\Travaux\Programmation\WAVE_PHOENIX-ACES-AGSS-COND-2011.fits"
 spec_fits = r"C:\M1 SOAC\S2\Stage M1\Travaux\Programmation\lte06500-4.50-0.0.PHOENIX-ACES-AGSS-COND-2011-HiRes.fits"
@@ -107,7 +102,7 @@ material = "ZnS_KCl"          # choix : "KCl", "ZnS", "Na2S", "ZnS_KCl", "no_clo
 R = 50                    #résolution spectrale
 
 
-# --- Routine principale ---
+# Routine principale
 def main():
     
     # 1) Charger les données PHOENIX et albédo
@@ -187,9 +182,7 @@ def main():
     Rp=Rp,
     t_index=i)
 
-    ''' -----------------------------------------------------------------
-        
-        Bonus : Tester le simulateur du coronographe.
+    ''' Bonus : Tester le simulateur du coronographe.
         Calcule la photométrie intégrée d’un spectre dans un filtre donné.'''
 
     # Lecture du fichier en ignorant les lignes de commentaire
@@ -197,8 +190,8 @@ def main():
     df.columns = ["lambda_nm", "T_percent"]
     
     # Conversion en arrays
-    wave_filter = df["lambda_nm"].values                    # en nm
-    trans_filter = df["T_percent"].values / 100             # en fraction (0–1)
+    wave_filter = df["lambda_nm"].values                  # en nm
+    trans_filter = df["T_percent"].values / 100           # en fraction (0–1)
 
     # Vérification des unités (important !)
     if not hasattr(flux_star, "unit"):
@@ -221,7 +214,6 @@ def main():
     print(f"Contraste (Bande 1) : {C_band:.2e}")
 
     
-    '''-----------------------------------------------------------'''
 
         # Valeurs observées à t_obs (c’est-à-dire days)
     C_obs    = C[i]
@@ -231,7 +223,7 @@ def main():
 
     beta = float(v_rad[i] / cst.c.value)
 
-    # --- Extraction des valeurs au bon instant ---
+    # Extraction des valeurs au bon instant
     
     # 10) Tracés spectraux
     star_spec(wave_nm, flux_star)
