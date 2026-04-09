@@ -1,10 +1,3 @@
-
-"""
-Created on Tue Jul 22 17:35:03 2025
-
-@author: rachel
-"""
-
 import numpy as np
 from scipy.interpolate import interp1d
 import astropy.units as u
@@ -21,7 +14,7 @@ def integrated_photometry(wave_nm: np.ndarray,
     ainsi que le contraste bande-passante (planet/star).
 
     Paramètres
-    ----------
+
     wave_nm : array
         Longueurs d’onde en nm du spectre (même que flux_*).
     flux_planet : Quantity
@@ -34,7 +27,7 @@ def integrated_photometry(wave_nm: np.ndarray,
         Transmission associée (entre 0 et 1), même taille que wave_filter.
 
     Retours
-    -------
+
     F_planet : float
         Flux intégré planète dans la bande [ph/s/m²]
     F_star : float
