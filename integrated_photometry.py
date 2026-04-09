@@ -1,8 +1,8 @@
-# -*- coding: utf-8 -*-
+
 """
 Created on Tue Jul 22 17:35:03 2025
 
-@author: rache
+@author: rachel
 """
 
 import numpy as np
